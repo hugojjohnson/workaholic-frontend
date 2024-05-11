@@ -18,6 +18,8 @@ export default function Reports() {
     const [user, setUser] = useContext(UserContext)
     const [logs, setLogs] = useContext(LogsContext)
 
+    console.log(logs)
+
     ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, Colors);
     ChartJS.register(annotationPlugin);
 

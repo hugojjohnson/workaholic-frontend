@@ -3,6 +3,9 @@ import { ApiUrlContext, LogsContext, UserContext } from "./../Context"
 import axios from "axios";
 
 export default function Dashboard({timer}) {
+
+
+    // return <p>Loading</p>
     const apiUrl = useContext(ApiUrlContext)
     const [user, setUser] = useContext(UserContext)
     const [logs, setLogs] = useContext(LogsContext)
@@ -12,13 +15,14 @@ export default function Dashboard({timer}) {
 
     const sendLog = async () => {
         const newLog = {
-            project: user.project,
-            duration: user.duration,
+            project: user.project || "Undefined",
+            duration: user.duration || 30,
             description: description,
             timeStarted: timer.timeStarted,
             timeFinished: new Date()
         }
         const response = await axios.post(apiUrl + "add-log", {
+            token: user.token,
             log: newLog
         })
 
@@ -42,6 +46,9 @@ export default function Dashboard({timer}) {
     let minutesStudiedToday = 0;
     for (const idk of logsForToday) { minutesStudiedToday += idk.duration }
 
+    useEffect(() => {
+        timer.resetClock(user.duration)
+    }, [user])
     useEffect(() => {
         if (timer.finished) {
             sendLog()
